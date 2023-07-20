@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ServerClient</string>
+    <string name="connect">Połącz</string>
+</resources>

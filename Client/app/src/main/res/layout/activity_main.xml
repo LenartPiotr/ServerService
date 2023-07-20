@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_marginLeft="30px"
+        android:layout_width="600px"
+        android:layout_height="wrap_content"
+        android:text="Adres ip"
+        android:textColor="@color/grey_dark"/>
+    <LinearLayout
+        android:layout_width="600px"
+        android:layout_height="100px"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/yellow"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/inputAddress"
+            android:layout_width="500px"
+            android:layout_height="wrap_content"
+            android:text="172.22.224.38"
+            android:textSize="14sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50px" />
+
+    <TextView
+        android:layout_marginLeft="30px"
+        android:layout_width="600px"
+        android:layout_height="wrap_content"
+        android:text="Port"
+        android:textColor="@color/grey_dark"/>
+    <LinearLayout
+        android:layout_width="600px"
+        android:layout_height="100px"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/yellow"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/inputPort"
+            android:layout_width="500px"
+            android:layout_height="wrap_content"
+            android:text="30415"
+            android:textSize="14sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100px" />
+
+    <Button
+        android:id="@+id/buttonConnect"
+        android:layout_width="600px"
+        android:layout_height="100px"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/green"
+        android:textColor="@color/grey_dark"
+        android:text="@string/connect"/>
+
+</LinearLayout>
