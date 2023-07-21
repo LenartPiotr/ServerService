@@ -1,15 +1,16 @@
 package programy.piotr.lenart.com.serverclient;
 
 import androidx.appcompat.app.AppCompatActivity;
-import programy.piotr.lenart.com.serverclient.net.Client;
+import programy.piotr.lenart.com.serverclient.basic.ICallback1;
+import network.Client;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.IOException;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,24 +34,49 @@ public class MainActivity extends AppCompatActivity {
                 final String address = inputAddress.getText().toString();
                 final String port = inputPort.getText().toString();
 
-                new Connection().execute(address, port);
+                Log.d("xxx", "click");
+
+                new Connection(address, Integer.parseInt(port)).execute();
             }
         });
     }
 
-    class Connection extends AsyncTask<String, Object, Integer> {
+    class Connection extends AsyncTask<String, Object, Void> {
+        String address;
+        int port;
+        public Connection(String address, int port){
+            super();
+            this.address = address;
+            this.port = port;
+        }
+
         @Override
-        protected Integer doInBackground(String[] args) {
+        protected Void doInBackground(String[] args) {
+            Log.d("xxx", "start");
             try {
-                Socket socket = new Socket(args[0], Integer.parseInt(args[1]));
+                Socket socket = new Socket(address, port);
                 Client client = new Client(socket);
+                client.listen();
+                client.on("connection", new ICallback1<Object>() {
+                    @Override
+                    public void run(Object ignored) {
+                        Log.d("xxx", "New connection");
+                    }
+                });
                 for (int i=0; i<5; i++) {
-                    client.writer.println(i);
+                    client.invoke("test", i);
+                    Thread.sleep(1000);
+                    Log.d("xxx", "send " + i);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return 0;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
     }
 }

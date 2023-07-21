@@ -1,6 +1,6 @@
 package lenart.piotr.server;
 
-import lenart.piotr.server.net.Server;
+import network.Server;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,6 +1,5 @@
-package lenart.piotr.server.net;
+package network;
 
-import lenart.piotr.server.exceptions.WrongActionException;
 import lenart.piotr.server.manager.MainReceiver;
 
 import java.io.IOException;
@@ -25,6 +24,7 @@ public class Server {
                     while (!thread.isInterrupted()) {
                         Socket socket = serverSocket.accept();
                         Client client = new Client(socket);
+                        client.listen();
                         new MainReceiver(client);
                     }
                 } catch (IOException ignored) { }
