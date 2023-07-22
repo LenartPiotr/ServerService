@@ -1,5 +1,6 @@
 package network;
 
+import lenart.piotr.server.basic.ICallback1;
 import lenart.piotr.server.manager.MainReceiver;
 
 import java.io.IOException;
@@ -12,9 +13,12 @@ public class Server {
     Thread thread;
     ServerSocket serverSocket;
 
+    ICallback1<Client> onNewConnection;
+
     List<Socket> sockets;
 
-    public Server(int port){
+    public Server(int port, ICallback1<Client> onNewConnection){
+        this.onNewConnection = onNewConnection;
         sockets = new ArrayList<>();
         thread = new Thread(() -> {
             try {
@@ -25,7 +29,7 @@ public class Server {
                         Socket socket = serverSocket.accept();
                         Client client = new Client(socket);
                         client.listen();
-                        new MainReceiver(client);
+                        onNewConnection.run(client);
                     }
                 } catch (IOException ignored) { }
                 System.out.println("Server stopped");

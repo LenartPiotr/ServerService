@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ServicesListActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100px"/>
+
+    <LinearLayout
+        android:id="@+id/buttonReceipt"
+        android:layout_width="800px"
+        android:layout_height="150px"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/yellow"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@drawable/bill"/>
+        <TextView
+            android:layout_width="600px"
+            android:layout_height="wrap_content"
+            android:text="@string/receipts"
+            android:textSize="24sp"
+            android:textColor="@color/grey_dark"
+            android:textAlignment="center" />
+    </LinearLayout>
+</LinearLayout>

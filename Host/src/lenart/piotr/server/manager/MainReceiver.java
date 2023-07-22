@@ -1,14 +1,23 @@
 package lenart.piotr.server.manager;
 
+import lenart.piotr.server.receipts.ReceiptsManager;
 import network.Client;
 
-import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainReceiver {
-    public MainReceiver(Client client) throws IOException {
+    public MainReceiver(Client client) {
         client.on("connection", ignored -> {
-            System.out.println("New connection");
+            new ReceiptsManager(client);
         });
-        client.on("test", System.out::println);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                client.stop();
+            }
+        }, 60 * 60 * 1000);
     }
 }

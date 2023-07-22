@@ -40,19 +40,19 @@ public class Client {
                         listeners.get(message.key).run(message.object);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     break;
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     break;
                 } catch (ClassCastException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     break;
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     break;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     break;
                 }
             }

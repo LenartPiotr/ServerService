@@ -1,5 +1,9 @@
 package network;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,7 +26,7 @@ public class Client {
     private ICallback0 disconnectCallback;
     private boolean active;
 
-    public Client(Socket socket) throws IOException {
+    public Client(final Socket socket) throws IOException {
         this.socket = socket;
         this.listeners = new HashMap<>();
 
@@ -39,11 +43,13 @@ public class Client {
                     try {
                         Object obj = inputStream.readObject();
                         Message message = (Message) obj;
-                        System.out.println("Received (" + message.key + "): " + message.object.toString());
+                        // System.out.println("Received (" + message.key + "): " + message.object.toString());
                         if (listeners.containsKey(message.key)) {
                             listeners.get(message.key).run(message.object);
                         }
                     } catch (IOException e) {
+                        Log.d("xxx", "is closed " + socket.isClosed());
+                        Log.d("xxx", "is connected " + socket.isConnected());
                         e.printStackTrace();
                         break;
                     } catch (ClassNotFoundException e) {
@@ -75,12 +81,42 @@ public class Client {
 
     public void invoke(String key, Object obj) {
         Message message = new Message(key, obj);
-        try {
-            outputStream.writeObject(message);
-        } catch (IOException e) {
-            if (active) {
-                stop();
+        AsyncInvokeTask task = new AsyncInvokeTask(outputStream, message, new ICallback1<IOException>() {
+            @Override
+            public void run(IOException arg) {
+                arg.printStackTrace();
+                if (active) stop();
             }
+        });
+        task.execute();
+    }
+
+    class AsyncInvokeTask extends AsyncTask<String, Object, Void> {
+
+        ObjectOutputStream stream;
+        Message message;
+        ICallback1<IOException> onException;
+
+        public AsyncInvokeTask(ObjectOutputStream stream, Message message, ICallback1<IOException> exceptionCallback){
+            super();
+            this.stream = stream;
+            this.message = message;
+            onException = exceptionCallback;
+        }
+
+        @Override
+        protected Void doInBackground(String[] args) {
+            try {
+                stream.writeObject(message);
+            } catch (IOException e) {
+                onException.run(e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import programy.piotr.lenart.com.serverclient.basic.ICallback1;
 import network.Client;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,40 +35,48 @@ public class MainActivity extends AppCompatActivity {
                 final String address = inputAddress.getText().toString();
                 final String port = inputPort.getText().toString();
 
-                Log.d("xxx", "click");
-
-                new Connection(address, Integer.parseInt(port)).execute();
+                ConnectionTask conn = new ConnectionTask(address, Integer.parseInt(port));
+                conn.setOnConnectionTask(new ICallback1<Client>() {
+                    @Override
+                    public void run(Client client) {
+                        Connection.getInstance().setUpNewConnection(client);
+                        Log.d("xxx", Connection.getInstance().client.toString());
+                        Intent intent = new Intent(MainActivity.this, ServicesListActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                conn.execute();
             }
         });
     }
 
-    class Connection extends AsyncTask<String, Object, Void> {
+    class ConnectionTask extends AsyncTask<String, Object, Void> {
         String address;
         int port;
-        public Connection(String address, int port){
+        Client client;
+        ICallback1<Client> onConnectionTask;
+        public ConnectionTask(String address, int port){
             super();
             this.address = address;
             this.port = port;
         }
 
+        public void setOnConnectionTask(ICallback1<Client> ConnectionTaskCallback) {
+            this.onConnectionTask = ConnectionTaskCallback;
+        }
+
         @Override
         protected Void doInBackground(String[] args) {
-            Log.d("xxx", "start");
             try {
                 Socket socket = new Socket(address, port);
-                Client client = new Client(socket);
+                client = new Client(socket);
                 client.listen();
                 client.on("connection", new ICallback1<Object>() {
                     @Override
                     public void run(Object ignored) {
-                        Log.d("xxx", "New connection");
+                        onConnectionTask.run(client);
                     }
                 });
-                for (int i=0; i<5; i++) {
-                    client.invoke("test", i);
-                    Thread.sleep(1000);
-                    Log.d("xxx", "send " + i);
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

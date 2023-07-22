@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ServerClient</string>
     <string name="connect">Połącz</string>
+    <string name="receipts">Paragony</string>
+    <string name="new_receipt">Nowy paragon</string>
+    <string name="receipts_list">Lista paragonów</string>
 </resources>
